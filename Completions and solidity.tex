@@ -1,0 +1,306 @@
+\documentclass[11pt]{amsart}
+
+
+
+\addtolength{\textwidth}{.5cm}
+\addtolength{\evensidemargin}{-2cm}
+\addtolength{\oddsidemargin}{-2cm}
+%\linespread{1}
+\parskip .2cm
+
+%\usepackage{eqparbox}
+%\usepackage[numbers]{natbib}
+%\renewcommand*{\bibnumfmt}[1]{\eqparbox[t]{bblnm}{[#1]}}
+
+
+
+
+
+
+
+\usepackage[all]{xy}
+\usepackage{url}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage[margin=1 in]{geometry}
+\usepackage{color,soul}
+\usepackage{amsthm}
+\usepackage{lipsum}
+% Theorem environments.
+%
+
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\td}{tr.deg}
+\DeclareMathOperator{\rr}{rat.rk}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\coker}{coker}
+
+\theoremstyle{plain}
+\newtheorem{theorem}[subsubsection]{Theorem}
+\newtheorem{proposition}[subsubsection]{Proposition}
+\newtheorem{lemma}[subsubsection]{Lemma}
+\newtheorem{Sublemma}[subsubsection]{Sublemma}
+\newtheorem{corollary}[subsubsection]{Corollary}
+\newtheorem{claim}[subsubsection]{Claim}
+
+\theoremstyle{definition}
+\newtheorem{definition}[subsubsection]{Definition}
+\newtheorem{example}[subsubsection]{Example}
+\newtheorem{examples}[subsubsection]{Examples}
+\newtheorem{exercise}[subsubsection]{Exercise}
+\newtheorem{situation}[subsubsection]{Situation}
+\newtheorem{conjecture}[subsubsection]{Conjecture}
+\newtheorem{notation}[subsubsection]{Notation}
+\newtheorem{comment}[subsubsection]{Comment}
+\newtheorem{remark}[subsubsection]{Remark}
+\newtheorem{remarks}[subsubsection]{Remarks}
+\newtheorem{setup}[subsubsection]{Setup}
+
+
+\newtheorem{Theorem}[subsection]{Theorem}
+\newtheorem{Proposition}[subsection]{Proposition}
+\newtheorem{Lemma}[subsection]{Lemma}
+\newtheorem{Corollary}[subsection]{Corollary}
+\newtheorem{Claim}[subsection]{Claim}
+
+\theoremstyle{definition}
+\newtheorem{Definition}[subsection]{Definition}
+\newtheorem{Example}[subsection]{Example}
+\newtheorem{Exercise}[subsection]{Exercise}
+\newtheorem{Situation}[subsection]{Situation}
+\newtheorem{Conjecture}[subsection]{Conjecture}
+\newtheorem{Notation}[subsection]{Notation}
+\newtheorem{Comment}[subsection]{Comment}
+\newtheorem{Remark}[subsection]{Remark}
+\newtheorem{Remarks}[subsection]{Remarks}
+
+
+\theoremstyle{plain}
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{customthm}[1]
+  {\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\theoremstyle{plain}  
+\newtheorem{innercustomcor}{Corollary}
+\newenvironment{customcor}[1]
+  {\renewcommand\theinnercustomcor{#1}\innercustomcor}
+  {\endinnercustomcor}
+  
+  
+
+
+
+\numberwithin{equation}{subsubsection}
+\numberwithin{equation}{subsubsection}
+%\Euler for math | Palatino for rm | Helvetica for ss | Courier for tt
+%\usepackage{euler} % math
+%\usepackage{eulervm} % a better implementation of the euler package (not in gwTeX)
+\normalfont
+\usepackage[T1]{fontenc}{}
+\usepackage{setspace}
+
+
+\usepackage{tikz-cd}
+
+\parskip .2cm
+%\usepackage{biblatex} 
+%\bibliography{Bibliography}
+
+
+
+\makeatletter
+\def\@tocline#1#2#3#4#5#6#7{\relax
+  \ifnum #1>\c@tocdepth % then omit
+  \else
+    \par \addpenalty\@secpenalty\addvspace{#2}%
+    \begingroup \hyphenpenalty\@M
+    \@ifempty{#4}{%
+      \@tempdima\csname r@tocindent\number#1\endcsname\relax
+    }{%
+      \@tempdima#4\relax
+    }%
+    \parindent\z@ \leftskip#3\relax \advance\leftskip\@tempdima\relax
+    \rightskip\@pnumwidth plus4em \parfillskip-\@pnumwidth
+    #5\leavevmode\hskip-\@tempdima
+      \ifcase #1
+       \or\or \hskip 1em \or \hskip 2em \else \hskip 3em \fi%
+      #6\nobreak\relax
+    \dotfill\hbox to\@pnumwidth{\@tocpagenum{#7}}\par
+    \nobreak
+    \endgroup
+  \fi}
+\makeatother
+\usepackage{hyperref}
+
+
+
+
+
+\pagestyle{plain}
+
+\title{Completions and solidity}
+\author{Rankeya Datta\vspace{-2ex}}
+\address{}
+\email{}
+\thanks{}
+%\date{April 11, 2017. \textcolor{red}{PRELIMINARY VERSION. DO NOT DISTRIBUTE}}                                           % Activate to display a given date or no date
+%\subsection{}
+
+
+\begin{document}
+\maketitle
+
+\section{Some facts on completions}
+Let $I$ be an ideal of a ring $A$. By $\widehat{A}^I$, we mean the completion of $A$ with respect to the $I$-adic topology. Algebraically, 
+$$\widehat{A}^I = \varprojlim_{n} A/I^n.$$
+Note that $\widehat{A}^I$ is $I\widehat{A}^I$-adically separated, that is,
+$$\bigcap_{n \in \mathbb N} I^n\widehat{A}^I = (0).$$
+
+\begin{lemma}
+\label{completion-map-basic-properties}
+The canonical map
+$$i: A \rightarrow \widehat{A}^I$$
+satisfies the following properties:
+\begin{enumerate}
+\item For all $n \in \mathbb{N}$, $\widehat{A}^I = i(A) + I^n\widehat{A}^I.$
+\item If $A$ is Noetherian, then $i$ is a flat map. Moreover, $i$ is faithfully flat if $I$ is contained in the Jacobson radical of $A$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) follows from the inverse limit interpretation of $\widehat{A}^I$. For a proof of (2) see [Mat89, Theorem 8.8 and Theorem 8.14].
+\end{proof}
+
+
+\begin{corollary}
+\label{completion-not-fg}
+Let $A$ be a Noetherian ring and $I$ an ideal of $A$ which is contained in the Jacobson radical. If $A$ is not $I$-adically complete, then the canonical map
+$$i: A \rightarrow \widehat{A}^I$$
+is not finite.
+\end{corollary}
+
+\begin{proof}
+Since $i$ is faithfully flat, when we tensor the short exact sequence
+$$0 \rightarrow A \xrightarrow{i} \widehat{A}^I \rightarrow \coker(i) \rightarrow 0$$
+by $A/I$, we retain a short exact sequence
+$$0 \rightarrow A/I \rightarrow \widehat{A}^I/I\widehat{A}^I \rightarrow \coker(i)/I\coker(i) \rightarrow 0.$$
+Since the induced map $A/I \rightarrow \widehat{A}^I/I\widehat{A}^I$ is an isomorphism, it follows that
+$$\coker(i) = I\coker(i).$$
+Thus if $i$ is finite, then $\coker(i)$ is a finitely generated $A$-module, and consequently by Nakayama's lemma,
+$$\coker(i) = 0.$$
+However, we assumed that $A$ is not $I$-adically complete, that is, $\coker(i) \neq 0$. Thus, $i$ cannot be finite.
+\end{proof}
+
+\begin{proposition}
+\label{maps-to-I-adic-separated}
+If $M$ is an $I$-adically separated $A$-module and $i: A \rightarrow \widehat{A}^I$ is the canonical map, then the induced map 
+$$i^*: \Hom_A(\widehat{A}^I, M) \rightarrow \Hom_A(A, M)$$
+is injective. 
+\end{proposition}
+
+\begin{proof}
+Let $\varphi: \widehat{A}^I \rightarrow M$ be an $A$-linear map such that 
+$$\varphi \circ i = 0.$$
+It suffices to show that $\varphi = 0$. Let $x \in \widehat{A}$. By Lemma \ref{completion-map-basic-properties}, for any $n \in \mathbb{N}$, there exists $a_n \in A$ and $x_n \in I^n\widehat{A}^I$ such that
+$$x = i(a_n) + x_n.$$
+Then
+$$\varphi(x) = \varphi(i(a_n)) + \varphi(x_n) = \varphi(x_n),$$
+and $\varphi(x_n) \in I^nM$ by $A$-linearity. This shows that
+$$\varphi(x) \in \bigcap_{n \in \mathbb N} I^nM = (0),$$
+where the last equality follows because $M$ is $I$-adically separated. Thus $\varphi = 0$.
+\end{proof}
+
+
+
+
+
+
+
+
+\section{Completions and solidity}
+
+Recall that an $A$-module $M$ is \textbf{solid} if $\Hom_A(M, A)$ is not the trivial module, that is, if there exists some non-trivial $A$-linear map $M \rightarrow A$. 
+
+Our goal is to try to figure out when $\widehat{A}^I$ is a solid $A$-module.
+
+\begin{proposition}
+\label{blah}
+Suppose $i: A \rightarrow \widehat{A}^I$ is the canonical map. For any 
+$$\varphi \in \Hom_A(\widehat{A}^I, A),$$
+we have
+$$\varphi(1)\widehat{A}^I \subseteq i(A).$$
+\end{proposition}
+
+\begin{proof}
+Consider the $A$-linear map 
+$$i \circ \varphi: \widehat{A}^I \rightarrow \widehat{A}^I,$$
+and let 
+$$a \coloneqq \varphi(1).$$
+We also have the $A$-linear map
+$$\ell_a: \widehat{A}^I \rightarrow \widehat{A}^I,$$
+given by left-multiplication by $a$. Now for any $x \in A$, 
+$$\ell_a(i(x)) = ai(x) = i(ax) = i(\varphi(1)x) = i \circ \varphi (i(x)),$$
+that is,
+$$i^*(\ell_a) = i^*(i \circ \varphi),$$
+where 
+$$i^*: \Hom_A(\widehat{A}^I, \widehat{A}^I) \rightarrow \Hom_A(A, \widehat{A}^I)$$
+is the map induced by pre-composition by $i$. Since $\widehat{A}^I$ is an $I$-adically separated $A$-module, it follows from Proposition \ref{maps-to-I-adic-separated} that $i^*$ is injective. Thus
+$$\ell_a = i \circ \varphi,$$
+and so,
+$$\varphi(1)\widehat{A}^I = \ell_a(\widehat{A}^I) \subseteq i(A).$$
+\end{proof}
+
+{\vspace{2mm}}
+
+
+\begin{corollary}
+\label{completion-rarely-splits}
+Let $I$ be an ideal of a ring $A$. If $A$ is not $I$-adically complete, then the canonical map
+$$i: A \rightarrow \widehat{A}^I$$
+does not split, that is, $i$ does not admit a left-inverse in $\textrm{Mod}_A$.
+\end{corollary}
+
+\begin{proof}
+Suppose for contradiction that $\varphi$ is a splitting of $i$. Then $i$ is injective (since it admits a left-inverse) and
+$$\varphi(1) = 1.$$
+The previous proposition implies that
+$$\widehat{A}^I = \varphi(1)\widehat{A}^I \subseteq i(A),$$
+that is, $i$ is also surjective, which means $i$ is an isomorphism. However, we assumed $A$ is not $I$-adically complete!
+\end{proof}
+
+{\vspace{2mm}}
+
+\begin{corollary}
+\label{completions-usually-not-solid}
+Let $A$ be a Noetherian ring and $I$ be an ideal of $A$ contained in the Jacobson radical. Suppose $\varphi \in \Hom_A(\widehat{A}^I, A)$. Then we have the following:
+\begin{enumerate}
+	\item $\varphi \neq 0$ if and only if $\varphi(1) \neq 0$.
+	\item If $A$ is not $I$-adically complete and $\varphi \neq 0$, then $\varphi(1)$ is a zerodivisor of A.
+	\item If $A$ is a domain that is not $I$-adically complete, then $\Hom_A(\widehat{A}^I, A) = 0$. That is, $\widehat{A}^I$ is not a solid $A$-algebra.
+\end{enumerate}
+\end{corollary}
+
+
+\begin{proof}
+(3) clearly follows from (1) and (2), and (1) follows from the injectivity of the induced map
+$$i^*: \Hom_A(\widehat{A}^I, A) \rightarrow \Hom_A(A,A),$$
+where $i: A \rightarrow \widehat{A}^I$ is the canonical map. Note that $i^*$ is injective by Proposition \ref{maps-to-I-adic-separated}, since $A$ is $I$-adically separated by Krull's intersection theorem. 
+
+Finally, for (2), if $\varphi  \neq 0$, then by (1), 
+$$\varphi(1) \neq 0.$$ 
+Assume that $\varphi(1)$ is a non-zerodivisor of $A$. Then by flatness of $i: A \rightarrow \widehat{A}^I$, $\varphi(1)$ is also a non-zerodivisor of $\widehat{A}^I$. In particular,
+$$\varphi(1)\widehat{A}^I \cong \widehat{A}^I.$$
+At the same time, Proposition \ref{blah} shows that
+$$\varphi(1)\widehat{A}^I \subseteq i(A),$$
+and so $\varphi(1)\widehat{A}^I$ is a finitely generated $A$-module, since it is a submodule of the finitely generated $A$-module $i(A)$ and $A$ is Noetherian. Thus $\widehat{A}^I$ is a finitely generated $A$-module, which contradicts the hypothesis that $A$ is not $I$-adically complete by Corollary \ref{completion-not-fg}.
+\end{proof}
+
+\vspace{5mm}
+
+\textcolor{red}{Question: Does part (3) of the previous corollary have counter-examples when $A$ is not a domain?}
+
+
+\end{document}
